@@ -1,9 +1,12 @@
-var config = {}
+require('dotenv').config();
 
-// Update to have your correct username and password
+var config = {};
+
 config.mongoURI = {
-    production: 'mongodb+srv://<USERNAME>:<PASSWORD>@gallery.wc344.mongodb.net/darkroom?retryWrites=true&w=majority',
-    development: 'mongodb+srv://<USERNAME>:<PASSWORD>@gallery.wc344.mongodb.net/darkroom-dev?retryWrites=true&w=majority',
-    test: 'mongodb+srv://<USERNAME>:<PASSWORD>@gallery.wc344.mongodb.net/darkroom-test?retryWrites=true&w=majority',
-}
+  production: process.env.MONGO_URI_PROD,
+  development: process.env.MONGO_URI_DEV,
+  test: process.env.MONGO_URI_TEST,
+};
+
 module.exports = config;
+
