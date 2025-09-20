@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        nodejs "node"   // 👈 matches the name you set in Jenkins Tools
+        nodejs "node"   // matches your NodeJS installation in Jenkins
     }
 
     stages {
@@ -18,6 +18,13 @@ pipeline {
             }
         }
 
+        stage('Run Tests') {
+            steps {
+                echo "🔹 Running tests..."
+                sh 'npm test'
+            }
+        }
+
         stage('Build/Run') {
             steps {
                 echo "Starting the application..."
@@ -28,6 +35,7 @@ pipeline {
         stage('Deploy to Render') {
             steps {
                 echo "🚀 Deploying to Render..."
+                // Add Render CLI commands here if needed
             }
         }
     }
@@ -38,6 +46,10 @@ pipeline {
         }
         failure {
             echo "❌ Build failed!"
+            // Send email notification if build fails
+            mail to: 'santhachepkemoi@gmail.com',
+                 subject: "Jenkins Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                 body: "The Jenkins build has failed. Please check the console output: ${env.BUILD_URL}"
         }
     }
 }
