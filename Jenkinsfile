@@ -12,12 +12,14 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
+                echo "📥 Checking out source code..."
                 checkout scm
             }
         }
 
         stage('Install dependencies') {
             steps {
+                echo "📦 Installing dependencies..."
                 sh 'npm install'
             }
         }
@@ -31,7 +33,7 @@ pipeline {
 
         stage('Build/Run') {
             steps {
-                echo "Starting the application..."
+                echo "🏗️ Starting the application..."
                 sh 'node server.js &'
             }
         }
@@ -39,7 +41,9 @@ pipeline {
         stage('Deploy to Render') {
             steps {
                 echo "🚀 Deploying to Render..."
-                // If you had Render CLI or Git auto-deploy, it would run here
+                // Example: trigger auto-deploy via git push (if Render is connected to GitHub)
+                // sh 'git push origin master'
+                // OR call a Render Deploy Hook via curl if you have it
             }
         }
     }
@@ -49,6 +53,7 @@ pipeline {
             echo "✅ Build succeeded!"
             slackSend(
                 channel: '#all-yourfirstnameip1',
+                color: 'good',
                 message: "✅ *Build #${env.BUILD_NUMBER}* for *${env.JOB_NAME}* succeeded 🚀\n🔗 <${env.RENDER_URL}|View deployed site>"
             )
         }
@@ -56,6 +61,7 @@ pipeline {
             echo "❌ Build failed!"
             slackSend(
                 channel: '#all-yourfirstnameip1',
+                color: 'danger',
                 message: "❌ *Build #${env.BUILD_NUMBER}* for *${env.JOB_NAME}* failed.\n🔍 <${env.BUILD_URL}|Check Jenkins logs>"
             )
             mail to: 'santhachepkemoi@gmail.com',
