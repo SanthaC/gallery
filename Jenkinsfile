@@ -49,14 +49,14 @@ pipeline {
             echo "✅ Build succeeded!"
             slackSend(
                 channel: '#all-yourfirstnameip1',
-                message: "✅ Build #${env.BUILD_NUMBER} succeeded for *${env.JOB_NAME}* 🚀\nView deployed site: ${env.RENDER_URL}"
+                message: "✅ *Build #${env.BUILD_NUMBER}* for *${env.JOB_NAME}* succeeded 🚀\n🔗 <${env.RENDER_URL}|View deployed site>"
             )
         }
         failure {
             echo "❌ Build failed!"
             slackSend(
                 channel: '#all-yourfirstnameip1',
-                message: "❌ Build #${env.BUILD_NUMBER} failed for *${env.JOB_NAME}*.\nCheck console: ${env.BUILD_URL}"
+                message: "❌ *Build #${env.BUILD_NUMBER}* for *${env.JOB_NAME}* failed.\n🔍 <${env.BUILD_URL}|Check Jenkins logs>"
             )
             mail to: 'santhachepkemoi@gmail.com',
                  subject: "Jenkins Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
