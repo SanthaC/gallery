@@ -1,21 +1,21 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const config = require('./_config');
+const Image = require('./models/images');
+
 const app = express();
 
-// Determine DB URI
-const dbURI = process.env.NODE_ENV === 'test'
-  ? 'mongodb://localhost:27017/dark-test'
-  : 'mongodb://localhost:27017/darkroom';
+// Pick DB URI depending on environment
+const env = process.env.NODE_ENV || 'development';
+const dbURI = config.mongoURI[env];
 
-// Connect to MongoDB once
-if (!mongoose.connection.readyState) {
-  mongoose.connect(dbURI)
-    .then(() => console.log('Connected to Database:', dbURI))
-    .catch(err => console.error('DB connection error:', err));
-}
+// Connect to MongoDB
+mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('✅ Connected to Database:', dbURI))
+  .catch(err => console.error('❌ DB connection error:', err));
 
+// Simple route
 app.get('/', async (req, res) => {
-  const Image = mongoose.model('Image'); // or require your model
   try {
     const images = await Image.find({});
     res.status(200).json(images);
@@ -25,4 +25,13 @@ app.get('/', async (req, res) => {
   }
 });
 
+// Export app for tests
 module.exports = app;
+
+// Only start server if file is run directly (not required by tests)
+if (require.main === module) {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
+  });
+}
