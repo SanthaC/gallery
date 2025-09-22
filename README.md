@@ -1,138 +1,94 @@
-Dark Room – Milestone 1 Setup
+# Dark Room Project
 
-This README outlines the steps taken to achieve Milestone 1: forking the repository, setting up a MongoDB Atlas cluster, and connecting it to the project.
-
-1. Fork and Clone the Repository
-
-Go to the GitHub repository page for the project.
-
-Click Fork in the top-right corner to create your own copy.
-
-Clone the forked repo locally:
-
-git clone https://github.com/<your-username>/<repo>.git
-cd <repo>
-
-2. Create a MongoDB Atlas Cluster
-
-Sign in to MongoDB Atlas
-
-Create a free shared cluster.
-
-Add a database user:
-
-Username: <username>
-
-Password: <password>
-
-Assign the role: atlasAdmin
-
-Add your IP to the cluster’s whitelist:
-
-Either your public IP or 0.0.0.0/0 (allows access from any IP)
-
-Copy the connection string for your cluster. It should look like:
-
-mongodb+srv://<username>:<password>@milestone-1.lritrnz.mongodb.net/darkroom-dev?retryWrites=true&w=majority
-
-3. Update _config.js
-
-Update _config.js to include your Atlas URI for example:
-
-var config = {}
-
-config.mongoURI = {
-  development: 'mongodb+srv://santha:1234@milestone-1.lritrnz.mongodb.net/darkroom-dev?retryWrites=true&w=majority',
-  production: 'mongodb+srv://santha:1234@milestone-1.lritrnz.mongodb.net/darkroom?retryWrites=true&w=majority',
-  test: 'mongodb+srv://santha:1234@milestone-1.lritrnz.mongodb.net/darkroom-test?retryWrites=true&w=majority',
-}
-
-module.exports = config;
+This repository contains the Dark Room project, a photo gallery web application. This README outlines the milestones achieved, setup instructions, and screenshots for verification.
 
 
-Tip: In production, it’s better to use environment variables instead of hardcoding credentials.
 
-4. Verify MongoDB Atlas Connection
+## **Milestone 1 – Setup**
 
-Create test-mongo.js:
+### Achievements
+- Forked and cloned the GitHub repository.
+- Created a MongoDB Atlas cluster and whitelisted IPs.
+- Created a database user and copied the connection string.
+- Updated `_config.js` to use Atlas URI.
+- Verified connection directly in `server.js` (removed `test-mongo.js` as it is no longer needed).
+- Successfully ran the application and uploaded images.
 
-const mongoose = require('mongoose');
-const config = require('./_config');
+### Screenshots
 
-mongoose.connect(config.mongoURI.development, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.then(() => console.log('✅ Connected to MongoDB Atlas!'))
-.catch((err) => console.error('❌ Connection error:', err));
-
-
-Run:
-
-node test-mongo.js
+**MongoDB Atlas Cluster:**  
+![MongoDB Cluster](assets/mongoDB-cluster.png)
 
 
-You should see:
+---
 
-✅ Connected to MongoDB Atlas!
+## **Milestone 2 – Jenkins Pipeline & Render Deployment**
 
-5. Update server.js for Atlas & Mongoose v6
+### Achievements
+- Created a Jenkins pipeline that installs dependencies, builds, and deploys.
+- Configured the pipeline to trigger automatically on pushes to GitHub.
+- Successfully deployed the app to Render.
+- Updated the landing page to visibly display **“MILESTONE 2”**.
 
-Suppress strictQuery warnings:
+### Screenshots
 
-mongoose.set('strictQuery', false);
+**Jenkins Pipeline Setup:**  
+![Jenkins Pipeline](assets/pipeline-build-history.png)
+
+**Render Deployment with Milestone 2 Banner:**  
+![Render Milestone 2](assets/deployed-render-app.png)
+
+---
+
+## **Milestone 3 – Tests Integration & Banner**
+
+### Achievements
+- Merged tests from the `test` branch into `main`.
+- Jenkins pipeline updated to run tests and send email notifications on failure.
+- Added a **MILESTONE 3** banner to the landing page.
+- Verified pipeline success and Render deployment.
+
+### Screenshots
+
+**Mocha Test Results:**  
+![Mocha Tests](assets/npm-test.png)
+
+**Updated Landing Page (MILESTONE 3):**  
+![Milestone 3 Banner](assets/deployed-render-app.png)
+
+**Jenkins Pipeline Running Tests:**  
+![Jenkins Tests](assets/pipeline-stage(1).png)
+![Jenkins Tests](assets/pipeline-stage(2).png)
+![Jenkins Tests](assets/pipeline-stage(3).png)
+![Jenkins Tests](assets/pipeline-stage(4).png)
+![Jenkins Tests](assets/pipeline-stage(5).png)
+---
+
+## **Milestone 4 – Slack Notifications & Final Banner**
+
+### Achievements
+- Integrated Slack for Jenkins build notifications.
+- Added Slack notifications for new photo uploads.
+- Updated landing page with **MILESTONE 4** banner.
+- Verified Jenkins pipeline, Slack notifications, and Render deployment.
+
+### Screenshots
+
+**Slack Build Success Notification:**  
+![Slack Build Success](assets/slack-output.png)
 
 
-Use Atlas URI instead of localhost:
+**Updated Landing Page (MILESTONE 4):**  
+![Milestone 4 Banner](assets/deployed-render-app.png)
 
-const config = require('./_config');
-mongoose.connect(config.mongoURI.development, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-}, (err) => {
-  if (err) console.log('❌ MongoDB connection error:', err);
-  else console.log('✅ Connected to MongoDB Atlas!');
-});
+**Render Deployment:**  
+![Render Milestone 4](assets/render-success.png)
 
+---
 
-Ensure routes, middleware, and EJS view engine are set up correctly.
+## **Setup Instructions**
 
-6. Start the Server
-
-Run:
-
-npm install         # install dependencies
-npm start           # start server
-
-
-Expected output:
-
-✅ Connected to MongoDB Atlas!
-🚀 Server is listening at http://localhost:5000
-
-7. Test the Application
-
-Open your browser and go to:
-
-http://localhost:5000
-
-
-Upload an image via the form.
-
-Verify that the image appears in your gallery and is stored in MongoDB Atlas.
-
-✅ Milestone 1 Achievements
-
-Forked and cloned the GitHub repository.
-
-Created a MongoDB Atlas cluster and whitelisted IP addresses.
-
-Created a database user and copied the connection string.
-
-Updated _config.js to use Atlas URI.
-
-Verified connection with test-mongo.js.
-
-Updated server.js for Atlas, Mongoose v6 compatibility, and suppressed warnings.
-
-Successfully ran the application and uploaded images.
+### 1. Clone Repository
+```bash
+git clone https://github.com/SanthaC/gallery.git
+cd gallery
